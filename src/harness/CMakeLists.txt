@@ -51,6 +51,8 @@ target_sources(harness PRIVATE
     harness.c
     harness.h
 
+    platforms/fps_overlay.c
+    platforms/fps_overlay.h
     platforms/null.c
     platforms/null.h
 

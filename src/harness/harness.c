@@ -289,6 +289,7 @@ int Harness_Init(int* argc, char* argv[]) {
     harness_game_config.demo_timeout = 240000;
     // disable developer diagnostics by default
     harness_game_config.enable_diagnostics = 0;
+    harness_game_config.show_fps = 0;
     // no volume multiplier
     harness_game_config.volume_multiplier = 1.0f;
     // start window in windowed mode
@@ -422,6 +423,9 @@ int Harness_ProcessCommandLine(int* argc, char* argv[]) {
         } else if (strcasecmp(argv[i], "--enable-diagnostics") == 0) {
             harness_game_config.enable_diagnostics = 1;
             consumed = 1;
+        } else if (strcasecmp(argv[i], "--show-fps") == 0) {
+            harness_game_config.show_fps = 1;
+            consumed = 1;
         } else if (strstr(argv[i], "--volume-multiplier=") != NULL) {
             char* s = strstr(argv[i], "=");
             harness_game_config.volume_multiplier = atof(s + 1);
@@ -508,6 +512,8 @@ static int Harness_Ini_Callback(void* user, const char* section, const char* nam
         gSausage_override = (value[0] == '1');
     } else if (MATCH("General", "Hires")) {
         gGraf_spec_index = (value[0] == '1');
+    } else if (MATCH("General", "ShowFPS")) {
+        harness_game_config.show_fps = (value[0] == '1');
     } else if (MATCH("General", "PhysicsPerFrame")) {
         harness_game_config.physics_per_frame = (value[0] == '1');
     }
