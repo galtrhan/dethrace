@@ -520,6 +520,14 @@ static int Harness_Ini_Callback(void* user, const char* section, const char* nam
         harness_game_config.freeze_timer = (value[0] == '1');
     } else if (MATCH("Cheats", "GameCompleted")) {
         harness_game_config.game_completed = (value[0] == '1');
+    } else if (MATCH("Cheats", "StartingCredits")) {
+        harness_game_config.starting_credits = atoi(value);
+    } else if (MATCH("Cheats", "StartingArmour")) {
+        harness_game_config.starting_armour = atoi(value);
+    } else if (MATCH("Cheats", "StartingPower")) {
+        harness_game_config.starting_power = atoi(value);
+    } else if (MATCH("Cheats", "StartingOffensive")) {
+        harness_game_config.starting_offensive = atoi(value);
     }
 
     else if (MATCH("Sound", "Enabled")) {

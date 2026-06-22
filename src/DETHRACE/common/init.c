@@ -722,6 +722,19 @@ void InitGame(int pStart_race) {
     // added by dethrace to support --game-completed arg
     gProgram_state.game_completed = harness_game_config.game_completed;
     // -
+
+    if (harness_game_config.starting_credits > 0) {
+        gProgram_state.credits = harness_game_config.starting_credits;
+    }
+    if (harness_game_config.starting_armour > 0) {
+        gProgram_state.current_car.power_up_levels[0] = harness_game_config.starting_armour;
+    }
+    if (harness_game_config.starting_power > 0) {
+        gProgram_state.current_car.power_up_levels[1] = harness_game_config.starting_power;
+    }
+    if (harness_game_config.starting_offensive > 0) {
+        gProgram_state.current_car.power_up_levels[2] = harness_game_config.starting_offensive;
+    }
 }
 
 // IDA: void __cdecl DisposeGameIfNecessary()
