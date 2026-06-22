@@ -49,6 +49,7 @@ typedef struct tHarness_game_config {
     int freeze_timer;
     unsigned demo_timeout;
     int enable_diagnostics;
+    int show_fps;
     float volume_multiplier;
     int start_full_screen;
     int gore_check;

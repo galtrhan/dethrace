@@ -77,6 +77,7 @@ static void* sdl2_so;
 #define SYMBOL_PREFIX SDL2_
 #define FOREACH_SDLX_SYM FOREACH_SDL2_SYM
 
+#include "fps_overlay.h"
 #include "sdl_dyn_common.h"
 
 static void calculate_viewport(int window_width, int window_height) {
@@ -350,6 +351,10 @@ static void SDL2_Harness_Swap(br_pixelmap* back_buffer) {
             *dest_pixels = converted_palette[*src_pixels];
             dest_pixels++;
             src_pixels++;
+        }
+        if (harness_game_config.show_fps) {
+            FpsOverlay_Tick(SDL2_GetTicks());
+            FpsOverlay_Draw(dest_pixels - back_buffer->height * back_buffer->width, dest_pitch, back_buffer->width, back_buffer->height);
         }
         SDL2_UnlockTexture(screen_texture);
         SDL2_RenderClear(renderer);
