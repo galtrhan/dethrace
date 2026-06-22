@@ -318,7 +318,7 @@ int DoMainMenuInterface(tU32 pTime_out, int pContinue_allowed) {
         { NULL, NULL },         // move_down_proc
         { 1, 1 },               // go_ahead_allowed
         { NULL, NULL },         // go_ahead_proc
-        { 1, 1 },               // escape_allowed
+        { 0, 0 },               // escape_allowed
         { NULL, NULL },         // escape_proc
         NULL,                   // exit_proc
         NULL,                   // draw_proc

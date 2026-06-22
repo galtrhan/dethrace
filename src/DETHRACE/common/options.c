@@ -1310,9 +1310,7 @@ int KeyAssignGoAhead(int* pCurrent_choice, int* pCurrent_mode) {
                                 }
                             }
                             if (gPending_entry < 0) {
-                                DRS3StartSound(gEffects_outlet, 3100);
-                                key = -1;
-                                break;
+                                gKey_mapping[i] = -2;
                             }
                         }
                     }
