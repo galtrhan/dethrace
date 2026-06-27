@@ -344,7 +344,11 @@ int KeyIsDown(int pKey_index) {
         }
         return 0;
     } else {
-        return gKey_array[gKey_mapping[pKey_index]];
+        int mapped_key = gKey_mapping[pKey_index];
+        if (mapped_key == -2) {
+            return 0;
+        }
+        return gKey_array[mapped_key];
     }
 }
 

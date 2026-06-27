@@ -921,7 +921,7 @@ tS3_sound_tag S3StartSound(tS3_outlet* pOutlet, tS3_sound_id pSound) {
     chan->right_volume = gS3_channel_template.right_volume * chan->volume_multiplier;
     chan->rate = gS3_channel_template.rate;
     if (desc->type == eS3_ST_sample && (!desc->sound_data || desc->flags == 2)) {
-        if (!S3LoadSample(pSound)) {
+        if (S3LoadSample(pSound) != 0) {
             chan->needs_service = 1;
             gS3_last_error = eS3_error_load_sound;
             return 0;
@@ -1004,7 +1004,7 @@ tS3_sound_tag S3StartSound2(tS3_outlet* pOutlet, tS3_sound_id pSound, tS3_repeat
         return 0;
     }
     if (desc->type == eS3_ST_sample) {
-        if (desc->sound_data == NULL && (!S3LoadSample(pSound) || (desc->flags & 2) != 0)) {
+        if (desc->sound_data == NULL && (S3LoadSample(pSound) != 0 || (desc->flags & 2) != 0)) {
             chan->needs_service = 1;
             gS3_last_error = eS3_error_load_sound;
             return 0;
