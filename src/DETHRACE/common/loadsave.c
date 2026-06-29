@@ -31,7 +31,7 @@ int gStarted_typing;
 // GLOBAL: CARM95 0x00536274
 int gSave_allowed;
 
-#define SAVEGAME_VERSION 6
+#define SAVEGAME_VERSION 8
 
 #define SWAP32_BE(V)      \
     do {                  \
@@ -129,8 +129,8 @@ void LoadSavedGames(void) {
     tU32 the_size;
 
 #ifdef DETHRACE_FIX_BUGS
-    if (sizeof(tSave_game) != 948) {
-        PDFatalError("Size of tSave_game struct is not correct (should be 948 bytes)");
+    if (sizeof(tSave_game) != 952) {
+        PDFatalError("Size of tSave_game struct is not correct (should be 952 bytes)");
     }
 #endif
 

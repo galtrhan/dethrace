@@ -56,7 +56,7 @@ int gInitialised_grid;
 // GLOBAL: CARM95 0x00551d80
 int gIt_or_fox;
 
-#define PACK_POWERUPS(car) car->power_up_levels[0] + (car->power_up_levels[1] << 3) + (car->power_up_levels[2] << 6);
+#define PACK_POWERUPS(car) car->power_up_levels[0] + (car->power_up_levels[1] << 3) + (car->power_up_levels[2] << 6) + (car->power_up_levels[eParts_brakes] << 9);
 
 // IDA: void __usercall SendCarData(tU32 pNext_frame_time@<EAX>)
 // FUNCTION: CARM95 0x0042f2d0
@@ -266,6 +266,7 @@ void ReceivedMechanics(tNet_contents* pContents) {
             car->power_up_levels[0] = pContents->data.mech.powerups & 7;
             car->power_up_levels[1] = (pContents->data.mech.powerups >> 3) & 7;
             car->power_up_levels[2] = (pContents->data.mech.powerups >> 6) & 7;
+            car->power_up_levels[eParts_brakes] = (pContents->data.mech.powerups >> 9) & 7;
             car->keys = car->message.keys;
             if (car->message.keys.joystick_acc >= 0) {
                 car->joystick.acc = car->message.keys.joystick_acc << 9;
@@ -284,6 +285,7 @@ void ReceivedMechanics(tNet_contents* pContents) {
             car->power_up_levels[0] = pContents->data.mech.powerups & 7;
             car->power_up_levels[1] = (pContents->data.mech.powerups >> 3) & 7;
             car->power_up_levels[2] = (pContents->data.mech.powerups >> 6) & 7;
+            car->power_up_levels[eParts_brakes] = (pContents->data.mech.powerups >> 9) & 7;
             car->keys = car->message.keys;
             if (car->message.keys.joystick_acc >= 0) {
                 car->joystick.acc = car->message.keys.joystick_acc << 9;

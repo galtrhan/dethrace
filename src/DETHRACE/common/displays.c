@@ -429,6 +429,7 @@ void DoPSPowerupHeadups(void) {
     DoPSPowerHeadup(gCurrent_graf_data->armour_headup_y[gProgram_state.cockpit_on], gProgram_state.current_car.power_up_levels[0], "A", 45);
     DoPSPowerHeadup(gCurrent_graf_data->power_headup_y[gProgram_state.cockpit_on], gProgram_state.current_car.power_up_levels[1], "P", 99);
     DoPSPowerHeadup(gCurrent_graf_data->offense_headup_y[gProgram_state.cockpit_on], gProgram_state.current_car.power_up_levels[2], "O", 4);
+    DoPSPowerHeadup(gCurrent_graf_data->offense_headup_y[gProgram_state.cockpit_on] - 12, gProgram_state.current_car.power_up_levels[eParts_brakes], "B", 4);
 }
 
 // IDA: void __usercall DoHeadups(tU32 pThe_time@<EAX>)

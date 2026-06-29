@@ -159,7 +159,8 @@ typedef enum tParts_category {
     eParts_armour = 0,
     eParts_power = 1,
     eParts_offensive = 2,
-    eParts_count = 3
+    eParts_brakes = 3,
+    eParts_count = 4
 } tParts_category;
 
 typedef enum tRace_over_reason {
@@ -775,7 +776,7 @@ typedef struct tCar_spec_struct {              // size: 0x1a9c
     tImpact_location last_impact_location;     // @0x964
     tDamage_program damage_programs[6];        // @0x968
     tHeadup_slot headup_slots[2][20];          // @0x998
-    tParts_spec power_ups[3];                  // @0xfd8
+    tParts_spec power_ups[4];                  // @0xfd8
     int car_actor_pipe_ref;                    // @0x12b4
     tCar_actor car_model_actors[5];            // @0x12b8
     br_material* screen_material;              // @0x13a8
@@ -874,8 +875,9 @@ typedef struct tCar_spec_struct {              // size: 0x1a9c
     tS32 powerups[64];                         // @0x1984
     tU32 time_to_recover;                      // @0x1a84
     tU32 repair_time;                          // @0x1a88
-    int power_up_levels[3];                    // @0x1a8c
+    int power_up_levels[4];                    // @0x1a8c
     tS3_sound_tag horn_sound_tag;              // @0x1a98
+    float brake_multiplier;                    // runtime brake scaling from powerups
 } tCar_spec;
 
 typedef struct tOppo_psyche {
@@ -2044,7 +2046,7 @@ typedef struct tSave_game {
     tU32 current_race_index;
     tU32 redo_race_index;
     tU32 frank_or_annitude;
-    tU32 power_up_levels[3];
+    tU32 power_up_levels[4];
     tU32 version;
     tU32 checksum;
 } tSave_game;

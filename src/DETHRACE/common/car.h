@@ -41,6 +41,7 @@ extern int gStop_opponents_moving;
 extern float gDefensive_powerup_factor[6];
 extern float gOffensive_powerup_factor[6];
 extern float gEngine_powerup_factor[6];
+extern float gBrake_upgrade_factor[6];
 extern br_angle gPanning_camera_angle;
 extern br_scalar gPanning_camera_height;
 extern int gFace_count;
@@ -368,6 +369,10 @@ int TestForNan(float* f);
 void CheckCameraHither(void);
 
 void SetCarSuspGiveAndHeight(tCar_spec* pCar, br_scalar pFront_give_factor, br_scalar pRear_give_factor, br_scalar pDamping_factor, br_scalar pExtra_front_height, br_scalar pExtra_rear_height);
+
+void SetBrakeUpgradeLevel(tCar_spec* pCar, int pLevel);
+
+br_scalar GetBrakeScale(tCar_spec* pCar);
 
 int TestForCarInSensiblePlace(tCar_spec* car);
 

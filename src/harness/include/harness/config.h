@@ -62,6 +62,7 @@ typedef struct tHarness_game_config {
     int starting_armour;
     int starting_power;
     int starting_offensive;
+    int starting_brakes;
 
     int install_signalhandler;
     int no_bind;

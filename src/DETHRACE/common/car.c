@@ -160,6 +160,9 @@ float gOffensive_powerup_factor[6] = { 1.0f, 1.5f, 2.0f, 3.0f, 5.0f, 10.0f };
 // GLOBAL: CARM95 0x00514dd8
 float gEngine_powerup_factor[6] = { 1.3f, 1.9f, 2.5f, 3.2f, 4.0f, 10.0f };
 
+// GLOBAL: added for upgradeable brakes
+float gBrake_upgrade_factor[6] = { 1.0f, 1.15f, 1.3f, 1.5f, 1.75f, 2.0f };
+
 // GLOBAL: CARM95 0x00514df0
 br_angle gPanning_camera_angle;
 
@@ -497,6 +500,7 @@ void InitialiseCar2(tCar_spec* pCar, int pClear_disabled_flag) {
     pCar->damage_multiplier = 1.f;
     pCar->collision_mass_multiplier = 1.f;
     pCar->engine_power_multiplier = 1.f;
+    pCar->brake_multiplier = 1.f;
     pCar->bounce_rate = 0.f;
     pCar->bounce_amount = 0.f;
     pCar->knackered = 0;
@@ -1007,16 +1011,21 @@ void CalcEngineForce(tCar_spec* c, br_scalar dt) {
         c->traction_control = 1;
     }
     if (c->keys.dec || (c->keys.acc && !c->gear) || c->joystick.dec > 0 || (c->joystick.acc > 0 && !c->gear)) {
+        br_scalar brake_scale;
+        br_scalar max_brake;
+
+        brake_scale = GetBrakeScale(c);
+        max_brake = (c->initial_brake + c->brake_increase) * brake_scale;
         if (c->joystick.dec > 0) {
-            brake_temp = (double)(c->joystick.dec / 0x10000) * c->brake_increase;
-            c->brake_force = brake_temp + c->initial_brake;
+            brake_temp = (double)(c->joystick.dec / 0x10000) * c->brake_increase * brake_scale;
+            c->brake_force = brake_temp + c->initial_brake * brake_scale;
         }
         if (c->brake_force == 0.0f) {
-            c->brake_force = c->initial_brake;
+            c->brake_force = c->initial_brake * brake_scale;
         } else {
-            c->brake_force += c->brake_increase * dt;
-            if (c->initial_brake + c->brake_increase < c->brake_force) {
-                c->brake_force = c->initial_brake + c->brake_increase;
+            c->brake_force += c->brake_increase * dt * brake_scale;
+            if (max_brake < c->brake_force) {
+                c->brake_force = max_brake;
             }
         }
     } else {
@@ -7399,6 +7408,27 @@ void CheckCameraHither(void) {
         cam->hither_z = (float)old_hither;
     }
     old_hither = (int)cam->hither_z;
+}
+
+void SetBrakeUpgradeLevel(tCar_spec* pCar, int pLevel) {
+    if (pLevel < 0) {
+        pLevel = 0;
+    } else if (pLevel > 5) {
+        pLevel = 5;
+    }
+    pCar->power_up_levels[eParts_brakes] = pLevel;
+}
+
+br_scalar GetBrakeScale(tCar_spec* pCar) {
+    int level;
+
+    level = pCar->power_up_levels[eParts_brakes];
+    if (level < 0) {
+        level = 0;
+    } else if (level > 5) {
+        level = 5;
+    }
+    return pCar->brake_multiplier * gBrake_upgrade_factor[level];
 }
 
 // IDA: void __usercall SetCarSuspGiveAndHeight(tCar_spec *pCar@<EAX>, br_scalar pFront_give_factor, br_scalar pRear_give_factor, br_scalar pDamping_factor, br_scalar pExtra_front_height, br_scalar pExtra_rear_height)

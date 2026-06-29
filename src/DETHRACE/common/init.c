@@ -735,6 +735,9 @@ void InitGame(int pStart_race) {
     if (harness_game_config.starting_offensive > 0) {
         gProgram_state.current_car.power_up_levels[2] = harness_game_config.starting_offensive;
     }
+    if (harness_game_config.starting_brakes > 0) {
+        SetBrakeUpgradeLevel(&gProgram_state.current_car, harness_game_config.starting_brakes);
+    }
 }
 
 // IDA: void __cdecl DisposeGameIfNecessary()

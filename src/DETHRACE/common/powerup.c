@@ -656,13 +656,14 @@ int GotTimeOrPower(tPowerup* pPowerup, tCar_spec* pCar) {
             || (gCurrent_net_game->type == eNet_game_type_tag && gThis_net_player_index != gIt_or_fox);
         if (pCar->power_up_levels[eParts_armour] < MAX_POWER_UP_LEVEL
             || (pCar->power_up_levels[eParts_power] < MAX_POWER_UP_LEVEL && !not_allowed_power)
-            || pCar->power_up_levels[eParts_offensive] < MAX_POWER_UP_LEVEL) {
+            || pCar->power_up_levels[eParts_offensive] < MAX_POWER_UP_LEVEL
+            || pCar->power_up_levels[eParts_brakes] < MAX_POWER_UP_LEVEL) {
 
             for (i = 0; i < 50; i++) {
                 if (not_allowed_power) {
                     index = PercentageChance(50) ? eParts_armour : eParts_offensive;
                 } else {
-                    index = IRandomBetween(eParts_armour, eParts_offensive);
+                    index = IRandomBetween(eParts_armour, eParts_brakes);
                 }
                 if (pCar->power_up_levels[index] < 4) {
                     ImprovePSPowerup(pCar, index);
@@ -840,6 +841,9 @@ int SetEngineFactor(tPowerup* pPowerup, tCar_spec* pCar) {
 
     pCar->engine_power_multiplier = pPowerup->float_params[0];
     pCar->grip_multiplier = pPowerup->float_params[1];
+    if (pPowerup->number_of_float_params > 7) {
+        pCar->brake_multiplier = pPowerup->float_params[7];
+    }
     SetCarSuspGiveAndHeight(pCar, pPowerup->float_params[2], pPowerup->float_params[3],
         pPowerup->float_params[6], pPowerup->float_params[4], pPowerup->float_params[5]);
     return GET_POWERUP_INDEX(pPowerup);
@@ -995,6 +999,7 @@ void ResetEngineFactor(tPowerup* pPowerup, tCar_spec* pCar) {
 
     pCar->engine_power_multiplier = 1.f;
     pCar->grip_multiplier = 1.f;
+    pCar->brake_multiplier = 1.f;
     SetCarSuspGiveAndHeight(pCar, 1.f, 1.f, 1.f, 0.f, 0.f);
 }
 

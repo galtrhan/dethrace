@@ -1865,6 +1865,33 @@ void SetModelFlags(br_model* pModel, int pOwner) {
     }
 }
 
+// FUNCTION: added for upgradeable brakes in legacy PARTSHOP.TXT files
+static void InitDefaultBrakeParts(tCar_spec* pCar_spec) {
+    int j;
+    tParts_spec* brakes;
+    tParts_spec* reference;
+    int count;
+
+    brakes = &pCar_spec->power_ups[eParts_brakes];
+    reference = &pCar_spec->power_ups[eParts_power];
+    count = reference->number_of_parts > 0 ? reference->number_of_parts : 5;
+    brakes->number_of_parts = count;
+    for (j = 0; j < count; j++) {
+        if (reference->number_of_parts > j) {
+            brakes->info[j].rank_required = reference->info[j].rank_required;
+            strcpy(brakes->info[j].part_name, reference->info[j].part_name);
+            memcpy(brakes->info[j].prices, reference->info[j].prices, sizeof(brakes->info[j].prices));
+        } else {
+            brakes->info[j].rank_required = j;
+            sprintf(brakes->info[j].part_name, "POWER%d.FLI", j + 1);
+            brakes->info[j].prices[0] = 400 * (j + 1);
+            brakes->info[j].prices[1] = 500 * (j + 1);
+            brakes->info[j].prices[2] = 600 * (j + 1);
+        }
+        brakes->info[j].data_ptr = NULL;
+    }
+}
+
 // IDA: void __usercall LoadCar(char *pCar_name@<EAX>, tDriver pDriver@<EDX>, tCar_spec *pCar_spec@<EBX>, int pOwner@<ECX>, char *pDriver_name, tBrender_storage *pStorage_space)
 // FUNCTION: CARM95 0x00420144
 void LoadCar(char* pCar_name, tDriver pDriver, tCar_spec* pCar_spec, int pOwner, char* pDriver_name, tBrender_storage* pStorage_space) {
@@ -1979,6 +2006,7 @@ void LoadCar(char* pCar_name, tDriver pDriver, tCar_spec* pCar_spec, int pOwner,
     pCar_spec->time_last_victim = 0;
     pCar_spec->disabled = 0;
     pCar_spec->active = 1;
+    pCar_spec->brake_multiplier = 1.f;
     for (i = 0; i < COUNT_OF(pCar_spec->power_up_levels); ++i) {
         pCar_spec->power_up_levels[i] = 0;
     }
@@ -2170,6 +2198,10 @@ void LoadCar(char* pCar_name, tDriver pDriver, tCar_spec* pCar_spec, int pOwner,
             FatalError(kFatalError_OpenPartsshopFile);
         }
         for (i = 0; i < COUNT_OF(pCar_spec->power_ups); ++i) {
+            if (i == eParts_brakes && feof(g)) {
+                InitDefaultBrakeParts(pCar_spec);
+                continue;
+            }
             GetALineAndDontArgue(g, s);
             str = strtok(s, "\t ,/");
             sscanf(str, "%d", &pCar_spec->power_ups[i].number_of_parts);

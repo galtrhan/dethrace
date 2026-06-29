@@ -534,6 +534,8 @@ static int Harness_Ini_Callback(void* user, const char* section, const char* nam
         harness_game_config.starting_power = atoi(value);
     } else if (MATCH("Cheats", "StartingOffensive")) {
         harness_game_config.starting_offensive = atoi(value);
+    } else if (MATCH("Cheats", "StartingBrakes")) {
+        harness_game_config.starting_brakes = atoi(value);
     }
 
     else if (MATCH("Sound", "Enabled")) {

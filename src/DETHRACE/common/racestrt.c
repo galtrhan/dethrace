@@ -654,7 +654,7 @@ int ChangeCar(int pNet_mode, int* pCar_index, tNet_game_details* pNet_game) {
     };
     int i;
     int result;
-    int power_up_levels[3];
+    int power_up_levels[4];
 
     gChoose_car_net_game = pNet_game;
     gChange_race_net_mode = pNet_mode;
@@ -840,6 +840,10 @@ void DrawPartsLabel(void) {
         break;
     case eParts_offensive:
         RunFlicAt(264, gCurrent_graf_data->parts_label_x, gCurrent_graf_data->parts_label_y);
+        break;
+    case eParts_brakes:
+        RunFlicAt(263, gCurrent_graf_data->parts_label_x, gCurrent_graf_data->parts_label_y);
+        break;
     default:
         break;
     }
@@ -951,7 +955,7 @@ void DoExchangePart(void) {
 int PartsShopGoAhead(int* pCurrent_choice, int* pCurrent_mode) {
     int flic_index;
 
-    if (*pCurrent_choice < 3 && *pCurrent_mode == 0) {
+    if (*pCurrent_choice < 4 && *pCurrent_mode == 0) {
         RemoveTransientBitmaps(1);
         DontLetFlicFuckWithPalettes();
         TurnFlicTransparencyOn();
@@ -981,9 +985,9 @@ int PartsShopGoAhead(int* pCurrent_choice, int* pCurrent_mode) {
         return 0;
     } else if (*pCurrent_mode == 1) {
         AddToFlicQueue(
-            gStart_interface_spec->pushed_flics[4].flic_index,
-            gStart_interface_spec->pushed_flics[4].x[gGraf_data_index],
-            gStart_interface_spec->pushed_flics[4].y[gGraf_data_index],
+            gStart_interface_spec->pushed_flics[5].flic_index,
+            gStart_interface_spec->pushed_flics[5].x[gGraf_data_index],
+            gStart_interface_spec->pushed_flics[5].y[gGraf_data_index],
             1);
         DoExchangePart();
         return 0;
@@ -998,9 +1002,9 @@ int UpPart(int* pCurrent_choice, int* pCurrent_mode) {
 
     gJust_bought_part = 0;
     AddToFlicQueue(
-        gStart_interface_spec->pushed_flics[5].flic_index,
-        gStart_interface_spec->pushed_flics[5].x[gGraf_data_index],
-        gStart_interface_spec->pushed_flics[5].y[gGraf_data_index],
+        gStart_interface_spec->pushed_flics[6].flic_index,
+        gStart_interface_spec->pushed_flics[6].x[gGraf_data_index],
+        gStart_interface_spec->pushed_flics[6].y[gGraf_data_index],
         1);
     DRS3StartSound(gEffects_outlet, 3000);
     RemoveTransientBitmaps(1);
@@ -1033,9 +1037,9 @@ int DownPart(int* pCurrent_choice, int* pCurrent_mode) {
 
     gJust_bought_part = 0;
     AddToFlicQueue(
-        gStart_interface_spec->pushed_flics[6].flic_index,
-        gStart_interface_spec->pushed_flics[6].x[gGraf_data_index],
-        gStart_interface_spec->pushed_flics[6].y[gGraf_data_index],
+        gStart_interface_spec->pushed_flics[7].flic_index,
+        gStart_interface_spec->pushed_flics[7].x[gGraf_data_index],
+        gStart_interface_spec->pushed_flics[7].y[gGraf_data_index],
         1);
     DRS3StartSound(gEffects_outlet, 3000);
     RemoveTransientBitmaps(1);
@@ -1083,13 +1087,13 @@ int DownClickPart(int* pCurrent_choice, int* pCurrent_mode, int pX_offset, int p
 int PartsArrowsOn(int* pCurrent_choice, int* pCurrent_mode) {
 
     AddToFlicQueue(
-        gStart_interface_spec->flicker_on_flics[5].flic_index,
-        gStart_interface_spec->flicker_on_flics[5].x[gGraf_data_index * 1],
-        gStart_interface_spec->flicker_on_flics[5].y[gGraf_data_index * 1],
-        1);
-    AddToFlicQueue(gStart_interface_spec->flicker_on_flics[6].flic_index,
+        gStart_interface_spec->flicker_on_flics[6].flic_index,
         gStart_interface_spec->flicker_on_flics[6].x[gGraf_data_index * 1],
         gStart_interface_spec->flicker_on_flics[6].y[gGraf_data_index * 1],
+        1);
+    AddToFlicQueue(gStart_interface_spec->flicker_on_flics[7].flic_index,
+        gStart_interface_spec->flicker_on_flics[7].x[gGraf_data_index * 1],
+        gStart_interface_spec->flicker_on_flics[7].y[gGraf_data_index * 1],
         1);
     return 0;
 }
@@ -1098,13 +1102,13 @@ int PartsArrowsOn(int* pCurrent_choice, int* pCurrent_mode) {
 // FUNCTION: CARM95 0x004509de
 int PartsArrowsOff(int* pCurrent_choice, int* pCurrent_mode) {
 
-    AddToFlicQueue(gStart_interface_spec->flicker_off_flics[5].flic_index,
-        gStart_interface_spec->flicker_off_flics[5].x[gGraf_data_index],
-        gStart_interface_spec->flicker_off_flics[5].y[gGraf_data_index],
-        1);
     AddToFlicQueue(gStart_interface_spec->flicker_off_flics[6].flic_index,
         gStart_interface_spec->flicker_off_flics[6].x[gGraf_data_index],
         gStart_interface_spec->flicker_off_flics[6].y[gGraf_data_index],
+        1);
+    AddToFlicQueue(gStart_interface_spec->flicker_off_flics[7].flic_index,
+        gStart_interface_spec->flicker_off_flics[7].x[gGraf_data_index],
+        gStart_interface_spec->flicker_off_flics[7].y[gGraf_data_index],
         1);
     return 0;
 }
@@ -1140,56 +1144,60 @@ void DrawPartsShop(int pCurrent_choice, int pCurrent_mode) {
 // FUNCTION: CARM95 0x00450e06
 void DoPartsShop(int pFade_away) {
     // GLOBAL: CARM95 0x0050f7a0
-    static tFlicette flicker_on[7] = {
+    static tFlicette flicker_on[8] = {
         { 43, { 225, 450 }, { 30, 72 } },
-        { 43, { 225, 450 }, { 60, 144 } },
-        { 43, { 225, 450 }, { 89, 214 } },
+        { 43, { 225, 450 }, { 52, 104 } },
+        { 43, { 225, 450 }, { 74, 136 } },
+        { 43, { 225, 450 }, { 96, 168 } },
         { 43, { 225, 450 }, { 152, 365 } },
         { 43, { 85, 170 }, { 152, 365 } },
         { 221, { 30, 60 }, { 79, 190 } },
         { 221, { 30, 60 }, { 79, 190 } },
     };
     // GLOBAL: CARM95 0x0050f830
-    static tFlicette flicker_off[7] = {
+    static tFlicette flicker_off[8] = {
         { 42, { 225, 450 }, { 30, 72 } },
-        { 42, { 225, 450 }, { 60, 144 } },
-        { 42, { 225, 450 }, { 89, 214 } },
+        { 42, { 225, 450 }, { 52, 104 } },
+        { 42, { 225, 450 }, { 74, 136 } },
+        { 42, { 225, 450 }, { 96, 168 } },
         { 42, { 225, 450 }, { 152, 365 } },
         { 42, { 85, 170 }, { 152, 365 } },
         { 220, { 30, 60 }, { 79, 190 } },
         { 220, { 30, 60 }, { 79, 190 } },
     };
     // GLOBAL: CARM95 0x0050f8c0
-    static tFlicette push[7] = {
+    static tFlicette push[8] = {
         { 254, { 225, 450 }, { 30, 72 } },
-        { 255, { 225, 450 }, { 60, 144 } },
-        { 256, { 225, 450 }, { 89, 214 } },
+        { 255, { 225, 450 }, { 52, 104 } },
+        { 256, { 225, 450 }, { 74, 136 } },
+        { 256, { 225, 450 }, { 96, 168 } },
         { 154, { 225, 450 }, { 152, 365 } },
         { 260, { 85, 170 }, { 152, 365 } },
         { 222, { 30, 60 }, { 79, 190 } },
         { 225, { 30, 60 }, { 120, 288 } },
     };
     // GLOBAL: CARM95 0x0050f950
-    static tMouse_area mouse_areas[7] = {
+    static tMouse_area mouse_areas[8] = {
         { { 225, 450 }, { 30, 72 }, { 288, 576 }, { 50, 120 }, 0, 0, 0, NULL },
-        { { 225, 450 }, { 60, 144 }, { 288, 576 }, { 80, 192 }, 1, 0, 0, NULL },
-        { { 225, 450 }, { 89, 214 }, { 288, 576 }, { 109, 262 }, 2, 0, 0, NULL },
-        { { 225, 450 }, { 152, 365 }, { 288, 576 }, { 172, 413 }, 3, 0, 0, NULL },
-        { { 85, 170 }, { 152, 365 }, { 148, 296 }, { 172, 413 }, 4, 1, 0, NULL },
+        { { 225, 450 }, { 52, 104 }, { 288, 576 }, { 72, 144 }, 1, 0, 0, NULL },
+        { { 225, 450 }, { 74, 136 }, { 288, 576 }, { 94, 182 }, 2, 0, 0, NULL },
+        { { 225, 450 }, { 96, 168 }, { 288, 576 }, { 116, 210 }, 3, 0, 0, NULL },
+        { { 225, 450 }, { 152, 365 }, { 288, 576 }, { 172, 413 }, 4, 0, 0, NULL },
+        { { 85, 170 }, { 152, 365 }, { 148, 296 }, { 172, 413 }, 5, 1, 0, NULL },
         { { 30, 60 }, { 79, 190 }, { 45, 90 }, { 106, 254 }, -1, 1, 0, UpClickPart },
         { { 30, 60 }, { 120, 288 }, { 45, 90 }, { 147, 353 }, -1, 1, 0, DownClickPart },
     };
     // GLOBAL: CARM95 0x0050faa0
     static tInterface_spec interface_spec = {
-        0, 250, 190, 0, 0, 0, 6,
-        { 1, 0 }, { 4, -1 }, { 4, 0 }, { 4, 3 }, { PartsArrowsOn, PartsArrowsOff },
-        { 1, 0 }, { 4, -1 }, { 4, 0 }, { 4, 3 }, { PartsArrowsOn, PartsArrowsOff },
+        0, 250, 190, 0, 0, 0, 7,
+        { 1, 0 }, { 4, -1 }, { 4, 0 }, { 4, 4 }, { PartsArrowsOn, PartsArrowsOff },
+        { 1, 0 }, { 4, -1 }, { 4, 0 }, { 4, 4 }, { PartsArrowsOn, PartsArrowsOff },
         { -1, -1 }, { -1, 0 }, { 0, 4 }, { 3, 4 }, { NULL, UpPart },
         { -1, -1 }, { 1, 0 }, { 0, 4 }, { 3, 4 }, { NULL, DownPart },
         { 1, 1 }, { PartsShopGoAhead, PartsShopGoAhead },
         { 1, 1 }, { NULL, NULL },
         NULL, DrawPartsShop, 0, NULL, StartPartsShop, DonePartsShop,
-        0, { 0, 0 }, NULL, 3, 1,
+        0, { 0, 0 }, NULL, 4, 1,
         COUNT_OF(flicker_on),
         flicker_on,
         flicker_off,
