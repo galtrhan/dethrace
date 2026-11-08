@@ -425,11 +425,18 @@ void DoPSPowerHeadup(int pY, int pLevel, char* pName, int pBar_colour) {
 // IDA: void __cdecl DoPSPowerupHeadups()
 // FUNCTION: CARM95 0x004c5288
 void DoPSPowerupHeadups(void) {
+    int cockpit;
+    int power_y;
+    int offense_y;
 
-    DoPSPowerHeadup(gCurrent_graf_data->armour_headup_y[gProgram_state.cockpit_on], gProgram_state.current_car.power_up_levels[0], "A", 45);
-    DoPSPowerHeadup(gCurrent_graf_data->power_headup_y[gProgram_state.cockpit_on], gProgram_state.current_car.power_up_levels[1], "P", 99);
-    DoPSPowerHeadup(gCurrent_graf_data->offense_headup_y[gProgram_state.cockpit_on], gProgram_state.current_car.power_up_levels[2], "O", 4);
-    DoPSPowerHeadup(gCurrent_graf_data->offense_headup_y[gProgram_state.cockpit_on] - 12, gProgram_state.current_car.power_up_levels[eParts_brakes], "B", 4);
+    cockpit = gProgram_state.cockpit_on;
+    power_y = gCurrent_graf_data->power_headup_y[cockpit];
+    offense_y = gCurrent_graf_data->offense_headup_y[cockpit];
+
+    DoPSPowerHeadup(gCurrent_graf_data->armour_headup_y[cockpit], gProgram_state.current_car.power_up_levels[0], "A", 45);
+    DoPSPowerHeadup(power_y, gProgram_state.current_car.power_up_levels[1], "P", 99);
+    DoPSPowerHeadup(offense_y, gProgram_state.current_car.power_up_levels[2], "O", 4);
+    DoPSPowerHeadup(2 * offense_y - power_y, gProgram_state.current_car.power_up_levels[eParts_brakes], "B", gColours[4]);
 }
 
 // IDA: void __usercall DoHeadups(tU32 pThe_time@<EAX>)
