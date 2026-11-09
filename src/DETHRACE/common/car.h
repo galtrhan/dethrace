@@ -41,7 +41,7 @@ extern int gStop_opponents_moving;
 extern float gDefensive_powerup_factor[6];
 extern float gOffensive_powerup_factor[6];
 extern float gEngine_powerup_factor[6];
-extern float gBrake_upgrade_factor[6];
+extern float gBrake_upgrade_factor[6]; // quality vs stock: -1..+1 by brake tier
 extern br_angle gPanning_camera_angle;
 extern br_scalar gPanning_camera_height;
 extern int gFace_count;

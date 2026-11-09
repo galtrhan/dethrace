@@ -160,8 +160,16 @@ float gOffensive_powerup_factor[6] = { 1.0f, 1.5f, 2.0f, 3.0f, 5.0f, 10.0f };
 // GLOBAL: CARM95 0x00514dd8
 float gEngine_powerup_factor[6] = { 1.3f, 1.9f, 2.5f, 3.2f, 4.0f, 10.0f };
 
-// GLOBAL: added for upgradeable brakes
-float gBrake_upgrade_factor[6] = { 1.0f, 1.15f, 1.3f, 1.5f, 1.75f, 2.0f };
+// Brake upgrade quality vs stock. Indices are power_up_levels (player levels 1..5 -> 0..4).
+// Level 3 (index 2) is original Carmageddon. Lower tiers lose force as speed rises;
+// higher tiers gain the same amount. Index 5 matches max tier.
+float gBrake_upgrade_factor[6] = { -1.0f, -0.5f, 0.0f, 0.5f, 1.0f, 1.0f };
+
+// Longitudinal car-space speed where the full brake tier effect applies.
+#define BRAKE_SPEED_REF 20.0f
+// At BRAKE_SPEED_REF, level 1 scale is (1 - this) and level 5 is (1 + this).
+#define BRAKE_SPEED_DELTA 0.45f
+
 
 // GLOBAL: CARM95 0x00514df0
 br_angle gPanning_camera_angle;
@@ -7421,6 +7429,9 @@ void SetBrakeUpgradeLevel(tCar_spec* pCar, int pLevel) {
 
 br_scalar GetBrakeScale(tCar_spec* pCar) {
     int level;
+    br_scalar speed;
+    br_scalar speed_t;
+    br_scalar scale;
 
     level = pCar->power_up_levels[eParts_brakes];
     if (level < 0) {
@@ -7428,7 +7439,19 @@ br_scalar GetBrakeScale(tCar_spec* pCar) {
     } else if (level > 5) {
         level = 5;
     }
-    return pCar->brake_multiplier * gBrake_upgrade_factor[level];
+
+    // Stock at standstill for every tier. Effect grows with forward/back speed.
+    speed = (br_scalar)fabs(pCar->velocity_car_space.v[2]);
+    speed_t = speed / BRAKE_SPEED_REF;
+    if (speed_t > 1.0f) {
+        speed_t = 1.0f;
+    }
+
+    scale = 1.0f + gBrake_upgrade_factor[level] * BRAKE_SPEED_DELTA * speed_t;
+    if (scale < 0.25f) {
+        scale = 0.25f;
+    }
+    return pCar->brake_multiplier * scale;
 }
 
 // IDA: void __usercall SetCarSuspGiveAndHeight(tCar_spec *pCar@<EAX>, br_scalar pFront_give_factor, br_scalar pRear_give_factor, br_scalar pDamping_factor, br_scalar pExtra_front_height, br_scalar pExtra_rear_height)

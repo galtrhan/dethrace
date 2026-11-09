@@ -3023,7 +3023,9 @@ void LoadParts(void) {
                         gProgram_state.current_car.power_ups[i].info[j].part_name,
                         &gProgram_state.current_car.power_ups[i].info[j].data_ptr,
                         &gProgram_state.current_car.power_ups[i].info[j].data_length)) {
-                    FatalError(kFatalError_LoadPartImageFile);
+                    FatalError(
+                        kFatalError_LoadPartImageFile,
+                        gProgram_state.current_car.power_ups[i].info[j].part_name);
                 }
             } else {
                 MAMSLock((void**)&gProgram_state.current_car.power_ups[i].info[j].data_ptr);

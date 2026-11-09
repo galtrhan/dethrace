@@ -842,7 +842,7 @@ void DrawPartsLabel(void) {
         RunFlicAt(264, gCurrent_graf_data->parts_label_x, gCurrent_graf_data->parts_label_y);
         break;
     case eParts_brakes:
-        RunFlicAt(263, gCurrent_graf_data->parts_label_x, gCurrent_graf_data->parts_label_y);
+        RunFlicAt(257, gCurrent_graf_data->parts_label_x, gCurrent_graf_data->parts_label_y);
         break;
     default:
         break;

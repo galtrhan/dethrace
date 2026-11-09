@@ -304,7 +304,7 @@ tFlic_spec gMain_flic_list[372] = {
     { "PARTARIN.FLI", 0, 0, 0, 0, 0, 0, NULL, 0u },
     { "PARTPFIN.FLI", 0, 0, 0, 0, 0, 0, NULL, 0u },
     { "PARTOFIN.FLI", 0, 0, 0, 0, 0, 0, NULL, 0u },
-    { "", 0, 0, 0, 0, 0, 0, NULL, 0u },
+    { "PARTBRGL.FLI", 0, 0, 0, 0, 0, 0, NULL, 0u },
     { "", 0, 0, 0, 0, 0, 0, NULL, 0u },
     { "", 0, 0, 0, 0, 0, 0, NULL, 0u },
     { "PARTEXIN.FLI", 0, 0, 0, 0, 0, 0, NULL, 0u },
@@ -1668,11 +1668,13 @@ int LoadFlicData(char* pName, tU8** pData, tU32* pData_length) {
             PathCat(the_path, the_path, pName);
             f = DRfopen(the_path, "rb");
             if (f == NULL) {
+                dr_dprintf("LoadFlicData: can't open '%s'", the_path);
                 return 0;
             }
             *pData_length = GetFileLength(f);
             *pData = BrMemAllocate(*pData_length, kMem_flic_data_2);
             if (*pData == NULL) {
+                dr_dprintf("LoadFlicData: out of memory for '%s' (%u bytes)", the_path, *pData_length);
                 fclose(f);
                 return 0;
             }

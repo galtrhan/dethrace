@@ -73,7 +73,7 @@ char* gError_messages[] = {
     "Opponents count mismatches actual number of opponents",
     "Can't load opponent mug-shot file",
     "Can't load grid image file",
-    "Can't load part image file",
+    "Can't load part image file '%'",
     "Can't load chrome font file",
     "Can't load funkotronic file",
     "Can't load groovadelic file",
